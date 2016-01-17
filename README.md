@@ -5,7 +5,7 @@ quaint-emoji
 Use emojis in your Quaint documents.
 
 The svg/png emojis provided by `quaint-emoji` are the excellent ones
-designed by [Emoji One](http://emojione.com/)
+designed by [Emoji One](http://emojione.com/).
 
 
 ## Install
@@ -64,7 +64,7 @@ For instance, there is no `:tree:` emoji, but with `fuzzy` enabled,
 you will still get something, like `:evergreen_tree:`. If it's close
 enough to what you want, at least that saves some time searching ;)
 
-To match :x:, fuzzy tries to find, in this order:
+To match `:x:`, fuzzy tries to find, in this order:
 
 1. An emoji that starts with `x_`
 2. An emoji that ends with `_x`
