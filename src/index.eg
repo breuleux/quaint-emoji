@@ -1,12 +1,93 @@
 
 require:
-   node-emoji -> emoji
+   node-emoji/lib/emojifile -> data
 
-install{@, options} =
-   @register-rules with {
-      "!! \\name"{engine, {=> name}} =
-         emoji[name.shed-all{}.raw{}.trim{}]
+defaults = {
+   operator = "!!"
+   method = "svg"
+   fuzzy = false
+}
+
+lookup = {=}
+
+items{data} each {key, {{*, chars}, _, _, names, *}} ->
+   names each name ->
+      lookup[name] = {key, chars}
+
+emojione-css = ".emojione{font-size:inherit;height:3ex;width:3.1ex;min-height:20px;min-width:20px;display:inline-block;margin:-.2ex .15em .2ex;line-height:normal;vertical-align:middle}img.emojione{width:auto}"
+
+zpad{var s, length} =
+   while s.length < length:
+      s = '0' + s
+   s
+
+install{@, _options} =
+   options = defaults & _options
+   m = options.method
+
+   match m:
+      "svg" or "png" ->
+         @register-resources with {
+            "css/emojione.css" => {
+               path = null
+               contents = emojione-css
+               inline = true
+               type = .css
+               method = .head
+            }
+         }
+      "png" ->
+         pass
+      "unicode" ->
+         pass
+      else ->
+         throw E.emoji.method{'method option must be "svg", "png", or "unicode"'}
+
+   search{index} =
+      var res = lookup[index]
+      if not res and options.fuzzy:
+         keys{lookup} each name when name.starts-with{index + "_"} ->
+            return lookup[name]
+         keys{lookup} each name when name.ends-with{"_" + index} ->
+            return lookup[name]
+         keys{lookup} each name when name.starts-with{index} ->
+            return lookup[name]
+         keys{lookup} each name when name.ends-with{index} ->
+            return lookup[name]
+         null
+      else:
+         res
+
+   insert-emoji{index} =
+      {ref, characters} = match search{index}:
+         false? -> return null
+         result -> result
+      match m:
+         "svg" or "png" ->
+            url = 'https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/{m}/{ref}.{m}'
+            img.emojione %
+               src = url
+               alt = index
+         "unicode" ->
+            characters
+
+   if options.operator:
+      @register-rules with {
+         '{options.operator} \\name' => {engine, {=> name}} ->
+            index = name.shed-all{}.raw{}.trim{}
+            res = insert-emoji{index}
+            if res:
+               res
+            else:
+               engine.next
+      }
+
+   @register-postprocessor{
+      R.g":([a-zA-Z_0-9 ]+):"
+      {_, name} ->
+         insert-emoji{name.trim{}} or ':{name}:'
    }
+
 
 main{*match} =
    {@, options = {=}} when @is-quaint-engine ->
