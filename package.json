@@ -1,6 +1,6 @@
 {
   "name": "quaint-emoji",
-  "description": "!!emoji for Quaint",
+  "description": ":emoji: for Quaint",
   "version": "0.0.0",
   "format": "cjs",
   "repository": {
@@ -18,7 +18,7 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "earlgrey-runtime": ">=0.0.11",
-    "inquirer-promise": "0.0.0",
+    "inquirer-promise": ">=0.0.3",
     "node-emoji": "^1.0.4"
   },
   "devDependencies": {
