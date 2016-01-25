@@ -1,0 +1,21 @@
+
+require:
+   chalk
+   inquirer-promise as inq
+
+
+async quaint-setup{config, instructions} =
+   url = "https://github.com/breuleux/quaint-emoji"
+   print 'Plugin documentation: {chalk.bold.cyan{url}}'
+
+   data = config.plugins.emoji or= {=}
+   data &: {
+      method = await inq.list{"What emoji format do you want to use?"} with
+         {"svg", "png", "unicode"}
+         {default = data.method or "svg"}
+      fuzzy = await inq.confirm{"Should I match emoji names fuzzily?"} with
+         {default = data.fuzzy or false}
+   }
+
+
+provide = quaint-setup
