@@ -10,7 +10,9 @@ designed by [Emoji One](http://emojione.com/).
 
 ## Install
 
-    npm install quaint-emoji -g
+    quaint --setup emoji
+
+Follow the instructions.
 
 
 ## Sample configuration
