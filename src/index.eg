@@ -14,7 +14,10 @@ items{data} each {key, {{*, chars}, _, _, names, *}} ->
    names each name ->
       lookup[name] = {key, chars}
 
-emojione-css = ".emojione{font-size:inherit;height:3ex;width:3.1ex;min-height:20px;min-width:20px;display:inline-block;margin:-.2ex .15em .2ex;line-height:normal;vertical-align:middle}img.emojione{width:auto}"
+emojione-css = ".emojione{font-size:inherit;height:3ex;width:3.1ex;min-height:20px;min-width:20px;display:inline-block;margin:-.2ex .15em .2ex;line-height:normal;vertical-align:middle}"
+
+;; this was in the css too: img.emojione{width:auto}
+;; but that seems to cause problems in IE and Edge
 
 zpad{var s, length} =
    while s.length < length:
