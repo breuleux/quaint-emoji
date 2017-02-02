@@ -1,7 +1,7 @@
 
 require:
    chalk
-   inquirer-promise as inq
+   inquirer-shortcuts as inq
 
 
 async quaint-setup{config, instructions} =
